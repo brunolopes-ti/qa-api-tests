@@ -40,3 +40,18 @@ Exemplo:
 
 ```javascript
 pm.collectionVariables.set("user_id", json.id);
+
+
+## Evidências dos testes  
+
+### GET - Buscar usuário por ID  
+![GET](prints/get-tests.png)  
+
+### POST - Criar usuário  
+![POST](prints/post-tests.png)
+
+### PATCH - Atualizar usuário  
+![PATCH](prints/patch-tests.png)  
+
+### DELETE - Remover usuário  
+![DELETE](prints/delete-tests.png)  
