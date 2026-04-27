@@ -1,56 +1,67 @@
-# QA API Tests – Validação de Endpoints REST com Postman
+# 🧪 QA Lab – Testes de API com Postman
 
-## Objetivo
-Este projeto tem como objetivo validar o comportamento de endpoints REST utilizando Postman, com foco em testes funcionais de API, validação de respostas, consistência de dados e simulação de operações CRUD.
+Projeto prático focado em testes de API REST utilizando Postman, com validações automatizadas e uso de variáveis dinâmicas.
 
-## API Utilizada
-- JSONPlaceholder (API pública para testes)
+## 🚀 Objetivo
 
-## Escopo dos Testes  
-- Validação de leitura de dados (GET)  
-- Criação de recursos (POST)  
-- Atualização de dados (PUT/PATCH)  
-- Remoção de recursos (DELETE)  
+Simular testes reais de API aplicando conceitos fundamentais de QA:
 
-## Ferramentas Utilizadas
+- Testes de endpoints REST (CRUD)
+- Validação de respostas (status code e conteúdo)
+- Uso de variáveis dinâmicas
+- Organização de testes em collection
+
+---
+
+## 🔧 Tecnologias utilizadas
+
 - Postman
-- JSON
-- Git/GitHub
+- JSONPlaceholder (API pública)
+- JavaScript (scripts de teste)
 
-## Estrutura do Projeto
-qa-api-tests/  
-├── collections/  
-│         └── jsonplaceholder-api-tests.postman_collection.json  
-├── test-evidence/  
-│         └── api-test-summary.md  
-└── README.md  
+---
 
-## Cenários Validados
-| Método | Endpoint | Objetivo | Status Esperado |  
-|--------|----------|----------|-----------------|  
-| GET | /posts/1 | Buscar recurso existente | 200 |  
-| POST | /posts | Criar novo recurso | 201 |  
-| PATCH | /posts/1 | Atualizar recurso existente | 200 |  
-| DELETE | /posts/1 | Remover recurso | 200 ou 204 |  
+## 📌 Funcionalidades testadas
 
-## Validações Aplicadas  
+### 🔍 GET – Buscar usuário por ID
+- Validação de status 200
+- Verificação de campos obrigatórios
+- Armazenamento do ID em variável (`user_id`)
 
-- Status code das respostas  
-- Tempo de resposta da API  
-- Estrutura e formato do payload JSON  
-- Existência de campos obrigatórios  
-- Consistência dos dados retornados  
-- Validação de operações CRUD  
+### ➕ POST – Criar usuário
+- Validação de status 201
+- Verificação de retorno de ID
+- Salvamento do ID criado para uso posterior
 
-## Evidências
-As evidências de execução dos testes estão disponíveis na pasta test-evidence/, incluindo resumo dos cenários executados e resultados obtidos.  
+### ✏️ PATCH – Atualizar usuário
+- Atualização de dados via variável dinâmica
+- Validação do nome atualizado
+- Garantia de persistência do ID
 
-## Aprendizados
-- Funcionamento de APIs REST  
-- Métodos HTTP (GET, POST, PUT, DELETE)  
-- Estrutura e validação de JSON  
-- Criação de testes e assertions no Postman  
-- Organização de testes de API para portfólio profissional
+### ❌ DELETE – Remover usuário
+- Validação de status 200 ou 204
 
-## Observação  
-A API JSONPlaceholder simula operações de escrita. Métodos como POST, PUT e DELETE retornam respostas válidas, porém não persistem os dados.
+---
+
+## 🔁 Uso de variáveis
+
+O projeto utiliza a variável `user_id` para encadear as requisições:
+
+1. GET salva o ID
+2. POST cria um novo ID
+3. PATCH utiliza o ID salvo
+4. DELETE remove o usuário com base no ID
+
+---
+
+## 📊 Exemplos de testes automatizados
+
+```javascript
+pm.test("Status deve ser 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("ID deve continuar o mesmo", function () {
+    const json = pm.response.json();
+    pm.expect(json.id).to.eql(Number(pm.collectionVariables.get("user_id")));
+});
