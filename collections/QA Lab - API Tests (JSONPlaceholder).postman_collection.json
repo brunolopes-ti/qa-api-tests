@@ -9,7 +9,7 @@
   },
   "item": [
     {
-      "name": "Buscar usuário por ID",
+      "name": "GET - Buscar usuário por ID",
       "event": [
         {
           "listen": "test",
@@ -54,15 +54,6 @@
       "request": {
         "method": "GET",
         "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"name\": \"Bruno Ramos Lopes Atualizado\",\r\n    \"username\": \"brunolopes\",\r\n    \"email\": \"bruno@email.com\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
         "url": {
           "raw": "https://jsonplaceholder.typicode.com/users/1",
           "protocol": "https",
@@ -81,15 +72,24 @@
       "response": []
     },
     {
-      "name": "Atualizar usuário",
+      "name": "PATCH - Atualizar usuário",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
+              "pm.test(\"Status deve ser 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
               "pm.test(\"Nome deve ser atualizado\", function () {",
               "    const json = pm.response.json();",
               "    pm.expect(json.name).to.eql(\"Bruno Ramos Atualizado\");",
+              "});",
+              "",
+              "pm.test(\"ID deve continuar o mesmo\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json.id).to.eql(Number(pm.collectionVariables.get(\"user_id\")));",
               "});"
             ],
             "type": "text/javascript",
@@ -128,7 +128,7 @@
       "response": []
     },
     {
-      "name": "Criar usuário",
+      "name": "POST - Criar usuário",
       "event": [
         {
           "listen": "test",
@@ -183,7 +183,7 @@
       "response": []
     },
     {
-      "name": "Remover usuário",
+      "name": "DELETE - Remover usuário",
       "event": [
         {
           "listen": "test",
