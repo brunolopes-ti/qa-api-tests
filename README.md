@@ -1,8 +1,8 @@
-# 🧪 QA Lab – Testes de API com Postman
+# QA Lab – Testes de API com Postman
 
 Projeto prático focado em testes de API REST utilizando Postman, com validações automatizadas e uso de variáveis dinâmicas.
 
-## 🚀 Objetivo
+## Objetivo
 
 Simular testes reais de API aplicando conceitos fundamentais de QA:
 
@@ -13,7 +13,7 @@ Simular testes reais de API aplicando conceitos fundamentais de QA:
 
 ---
 
-## 🔧 Tecnologias utilizadas
+## Tecnologias utilizadas
 
 - Postman
 - JSONPlaceholder (API pública)
@@ -21,29 +21,29 @@ Simular testes reais de API aplicando conceitos fundamentais de QA:
 
 ---
 
-## 📌 Funcionalidades testadas
+## Funcionalidades testadas
 
 ### 🔍 GET – Buscar usuário por ID
 - Validação de status 200
 - Verificação de campos obrigatórios
 - Armazenamento do ID em variável (`user_id`)
 
-### ➕ POST – Criar usuário
+### POST – Criar usuário
 - Validação de status 201
 - Verificação de retorno de ID
 - Salvamento do ID criado para uso posterior
 
-### ✏️ PATCH – Atualizar usuário
+### PATCH – Atualizar usuário
 - Atualização de dados via variável dinâmica
 - Validação do nome atualizado
 - Garantia de persistência do ID
 
-### ❌ DELETE – Remover usuário
+### DELETE – Remover usuário
 - Validação de status 200 ou 204
 
 ---
 
-## 🔁 Uso de variáveis
+## Uso de variáveis
 
 O projeto utiliza a variável `user_id` para encadear as requisições:
 
@@ -54,7 +54,7 @@ O projeto utiliza a variável `user_id` para encadear as requisições:
 
 ---
 
-## 📊 Exemplos de testes automatizados
+## Exemplos de testes automatizados
 
 ```javascript
 pm.test("Status deve ser 200", function () {
