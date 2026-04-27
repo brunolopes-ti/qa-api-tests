@@ -23,7 +23,7 @@ Simular testes reais de API aplicando conceitos fundamentais de QA:
 
 ## Funcionalidades testadas
 
-### 🔍 GET – Buscar usuário por ID
+### GET – Buscar usuário por ID
 - Validação de status 200
 - Verificação de campos obrigatórios
 - Armazenamento do ID em variável (`user_id`)
