@@ -1,67 +1,42 @@
-# QA Lab – Testes de API com Postman
+# QA Lab – API Tests com Postman
 
-Projeto prático focado em testes de API REST utilizando Postman, com validações automatizadas e uso de variáveis dinâmicas.
+Projeto prático de testes de API REST utilizando Postman, com validações automatizadas, uso de variáveis dinâmicas e execução de fluxo CRUD.
 
 ## Objetivo
 
-Simular testes reais de API aplicando conceitos fundamentais de QA:
+Validar endpoints da API pública JSONPlaceholder aplicando práticas de QA em testes de API, incluindo:
 
-- Testes de endpoints REST (CRUD)
-- Validação de respostas (status code e conteúdo)
+- Validação de status code
+- Validação de campos no JSON
 - Uso de variáveis dinâmicas
-- Organização de testes em collection
+- Execução de fluxo CRUD
+- Organização de collection no Postman
 
----
+## API utilizada
 
-## Tecnologias utilizadas
+- JSONPlaceholder  
+- Endpoint base: `https://jsonplaceholder.typicode.com`
+
+## Ferramentas utilizadas
 
 - Postman
-- JSONPlaceholder (API pública)
-- JavaScript (scripts de teste)
+- JavaScript para scripts de teste
+- Git e GitHub
 
----
+## Cenários testados
 
-## Funcionalidades testadas
+| Método | Cenário | Endpoint | Validações |
+|---|---|---|---|
+| GET | Buscar usuário por ID | `/users/1` | Status 200, campo `name`, ID correto e salvamento de variável |
+| POST | Criar usuário | `/users` | Status 201, retorno de ID e salvamento de variável |
+| PATCH | Atualizar usuário | `/users/{{user_id}}` | Status 200, nome atualizado e ID mantido |
+| DELETE | Remover usuário | `/users/{{user_id}}` | Status 200 ou 204 |
 
-### GET – Buscar usuário por ID
-- Validação de status 200
-- Verificação de campos obrigatórios
-- Armazenamento do ID em variável (`user_id`)
+## Uso de variável dinâmica
 
-### POST – Criar usuário
-- Validação de status 201
-- Verificação de retorno de ID
-- Salvamento do ID criado para uso posterior
+Foi utilizada a variável `user_id` para reaproveitar o ID retornado nas requisições e encadear o fluxo entre os métodos.
 
-### PATCH – Atualizar usuário
-- Atualização de dados via variável dinâmica
-- Validação do nome atualizado
-- Garantia de persistência do ID
-
-### DELETE – Remover usuário
-- Validação de status 200 ou 204
-
----
-
-## Uso de variáveis
-
-O projeto utiliza a variável `user_id` para encadear as requisições:
-
-1. GET salva o ID
-2. POST cria um novo ID
-3. PATCH utiliza o ID salvo
-4. DELETE remove o usuário com base no ID
-
----
-
-## Exemplos de testes automatizados
+Exemplo:
 
 ```javascript
-pm.test("Status deve ser 200", function () {
-    pm.response.to.have.status(200);
-});
-
-pm.test("ID deve continuar o mesmo", function () {
-    const json = pm.response.json();
-    pm.expect(json.id).to.eql(Number(pm.collectionVariables.get("user_id")));
-});
+pm.collectionVariables.set("user_id", json.id);
