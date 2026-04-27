@@ -1,4 +1,4 @@
-# QA Lab – API Tests com Postman
+## QA Lab – API Tests com Postman
 
 Projeto prático de testes de API REST utilizando Postman, com validações automatizadas, uso de variáveis dinâmicas e execução de fluxo CRUD.
 
