@@ -4,7 +4,6 @@ Projeto prático de testes de API REST utilizando Postman, com validações auto
 
 Este projeto simula um cenário real de QA, validando endpoints e garantindo a consistência das respostas da API.
 
----
 
 ## Objetivo
 
@@ -16,22 +15,17 @@ Validar endpoints da API pública JSONPlaceholder aplicando práticas de QA em t
 - Execução de fluxo CRUD  
 - Organização de collection no Postman  
 
----
-
 ## API utilizada
 
 - JSONPlaceholder  
 - Endpoint base: `https://jsonplaceholder.typicode.com`  
 
----
 
 ## Ferramentas utilizadas
 
 - Postman  
 - JavaScript (scripts de teste)  
 - Git e GitHub  
-
----
 
 ## Cenários testados
 
@@ -42,7 +36,6 @@ Validar endpoints da API pública JSONPlaceholder aplicando práticas de QA em t
 | PATCH | Atualizar usuário | `/users/{{user_id}}` | Status 200, nome atualizado e ID mantido |
 | DELETE | Remover usuário | `/users/{{user_id}}` | Status 200 ou 204 |
 
----
 
 ## Uso de variável dinâmica
 
@@ -51,8 +44,6 @@ Foi utilizada a variável `user_id` para reaproveitar o ID retornado nas requisi
 ```javascript
 pm.collectionVariables.set("user_id", json.id);
 ```
-
----
 
 ## Evidências dos testes  
 
@@ -68,7 +59,6 @@ pm.collectionVariables.set("user_id", json.id);
 ### DELETE - Remover usuário  
 ![DELETE](prints/delete-tests.png)  
 
----
 
 ## Estrutura do projeto  
 
@@ -77,13 +67,11 @@ qa-api-tests/
 ├── prints/  
 └── README.md  
 
----
 
 ## Observação
 
 A API JSONPlaceholder é uma API pública de testes. As operações POST, PATCH e DELETE simulam alterações, mas não persistem dados permanentemente.  
 
----
 
 ## Aprendizados  
 
@@ -95,7 +83,6 @@ Com este projeto, desenvolvi habilidades práticas em:
 - Uso de variáveis dinâmicas para encadeamento de requisições  
 - Organização de cenários de teste e evidências para documentação técnica
 
----
 
 ## Contato  
 
