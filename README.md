@@ -75,10 +75,6 @@ pm.collectionVariables.set("user_id", json.id);
 qa-api-tests/  
 ├── collections/  
 ├── prints/  
-│   ├── get-tests.png  
-│   ├── post-tests.png  
-│   ├── patch-tests.png  
-│   └── delete-tests.png  
 └── README.md  
 
 ---
