@@ -50,13 +50,13 @@ pm.collectionVariables.set("user_id", json.id);
 ### GET - Buscar usuário por ID  
 <img src="prints/get-tests.png" width="700"/>
 
-### POST - Criar usuário  
+### DELETE - Remover usuário
 <img src="prints/delete-tests.png" width="700"/>
 
-### PATCH - Atualizar usuário  
+### POST - Criar usuário  
 <img src="prints/post-tests.png" width="700"/>
 
-### DELETE - Remover usuário  
+### PATCH - Atualizar usuário 
 <img src="prints/patch-tests.png" width="700"/>
 
 
