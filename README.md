@@ -48,16 +48,16 @@ pm.collectionVariables.set("user_id", json.id);
 ## Evidências dos testes  
 
 ### GET - Buscar usuário por ID  
-![GET](prints/get-tests.png)  
+<img src="prints/get-tests.png" width="700"/>
 
 ### POST - Criar usuário  
-![POST](prints/post-tests.png)
+<img src="prints/delete-tests.png" width="700"/>
 
 ### PATCH - Atualizar usuário  
-![PATCH](prints/patch-tests.png)  
+<img src="prints/post-tests.png" width="700"/>
 
 ### DELETE - Remover usuário  
-![DELETE](prints/delete-tests.png)  
+<img src="prints/patch-tests.png" width="700"/>
 
 
 ## Estrutura do projeto  
