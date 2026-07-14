@@ -1,0 +1,25 @@
+{
+  "name": "qa-api-tests",
+  "version": "1.0.0",
+  "description": "Projeto prático de testes de API REST utilizando Postman, com validações automatizadas, uso de variáveis dinâmicas e execução de fluxo CRUD.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "api": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunolopes-ti/qa-sql-validation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/brunolopes-ti/qa-sql-validation/issues"
+  },
+  "homepage": "https://github.com/brunolopes-ti/qa-sql-validation#readme",
+  "devDependencies": {
+    "newman": "^6.2.2"
+  }
+}
