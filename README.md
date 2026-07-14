@@ -1,8 +1,10 @@
 # QA API Tests - JSONPlaceholder
 
-Projeto prático de testes de API REST utilizando Postman, Newman e JSONPlaceholder.
+![API Tests - Newman](https://github.com/brunolopes-ti/qa-api-tests/actions/workflows/api-tests.yml/badge.svg)
 
-O objetivo deste projeto é demonstrar conhecimentos em testes de API, validação de endpoints, métodos HTTP, status code, payload JSON, scripts de teste, uso de variáveis, execução via terminal e documentação de evidências.
+Projeto prático de testes de API REST utilizando Postman, Newman, JavaScript e JSONPlaceholder.
+
+O objetivo deste projeto é demonstrar conhecimentos em testes de API, validação de endpoints, métodos HTTP, status code, payload JSON, scripts de teste, uso de variáveis, execução via terminal, execução automatizada com GitHub Actions e documentação de evidências.
 
 ---
 
@@ -13,6 +15,7 @@ O objetivo deste projeto é demonstrar conhecimentos em testes de API, validaç�
 - JavaScript
 - Node.js
 - JSONPlaceholder
+- GitHub Actions
 - Git
 - GitHub
 - Markdown
@@ -35,6 +38,8 @@ Este projeto tem como finalidade demonstrar a prática de testes de API REST, co
 
 A collection foi criada no Postman e posteriormente executada via terminal utilizando Newman.
 
+Além disso, o projeto possui pipeline configurado com GitHub Actions, permitindo a execução automática dos testes de API a cada alteração enviada para o repositório.
+
 ---
 
 ## Escopo dos testes
@@ -53,7 +58,8 @@ Também foram aplicadas validações como:
 - Estrutura de payload JSON;
 - Armazenamento de variáveis;
 - Encadeamento de dados entre requisições;
-- Execução automatizada via terminal com Newman.
+- Execução automatizada via terminal com Newman;
+- Execução automatizada via GitHub Actions.
 
 ---
 
@@ -61,6 +67,9 @@ Também foram aplicadas validações como:
 
 ```text
 qa-api-tests
+├── .github
+│   └── workflows
+│       └── api-tests.yml
 ├── collections
 │   └── QA Lab - API Tests (JSONPlaceholder).postman_collection.json
 ├── prints
@@ -68,7 +77,8 @@ qa-api-tests
 │   ├── post-tests.png
 │   ├── patch-tests.png
 │   ├── delete-tests.png
-│   └── newman-run-passando.png
+│   ├── newman-run-passando.png
+│   └── github-actions-api-tests-passando.png
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
@@ -243,6 +253,77 @@ prints/newman-run-passando.png
 
 ---
 
+## Execução automatizada com GitHub Actions
+
+Este projeto possui um workflow configurado com GitHub Actions para executar automaticamente os testes de API com Newman.
+
+O workflow é acionado automaticamente em eventos de `push` e `pull_request` na branch `main`.
+
+Etapas executadas no pipeline:
+
+- Checkout do repositório;
+- Configuração do Node.js;
+- Instalação das dependências com `npm ci`;
+- Execução dos testes de API com `npm run api`.
+
+Arquivo de configuração:
+
+```text
+.github/workflows/api-tests.yml
+```
+
+Evidência da execução no GitHub Actions:
+
+```text
+prints/github-actions-api-tests-passando.png
+```
+
+![GitHub Actions API Tests passando](prints/github-actions-api-tests-passando.png)
+
+---
+
+## Workflow GitHub Actions
+
+Arquivo:
+
+```text
+.github/workflows/api-tests.yml
+```
+
+Configuração utilizada:
+
+```yaml
+name: API Tests - Newman
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  api-tests:
+    name: Run API Tests with Newman
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npm run api
+```
+
+---
+
 ## Boas práticas aplicadas
 
 - Organização da collection em pasta específica;
@@ -253,6 +334,8 @@ prints/newman-run-passando.png
 - Uso de variáveis para reaproveitamento de dados;
 - Execução da collection via terminal com Newman;
 - Criação de script npm para facilitar a execução;
+- Execução automatizada dos testes de API com GitHub Actions;
+- Pipeline de testes configurado para rodar a cada push ou pull request;
 - Registro de evidências visuais;
 - Documentação técnica em README;
 - Controle de dependências com `package.json`;
@@ -270,6 +353,7 @@ Com este projeto, desenvolvi habilidades práticas em:
 - Validação de respostas JSON e status codes;
 - Uso de variáveis dinâmicas;
 - Execução de testes de API via terminal com Newman;
+- Configuração de pipeline com GitHub Actions;
 - Organização de evidências para documentação técnica;
 - Versionamento de projeto com Git e GitHub.
 
@@ -279,18 +363,18 @@ Com este projeto, desenvolvi habilidades práticas em:
 
 Concluído nesta etapa.
 
-Collection Postman criada, testes documentados, evidências registradas e execução via terminal configurada com Newman.
+Collection Postman criada, testes documentados, evidências registradas, execução via terminal configurada com Newman e pipeline automatizado com GitHub Actions.
 
 ---
 
 ## Próximas melhorias possíveis
 
 - Adicionar relatório HTML do Newman;
-- Configurar GitHub Actions para execução automática dos testes de API;
 - Criar arquivo de environment do Postman;
 - Separar dados de teste;
 - Adicionar testes negativos;
-- Expandir a suíte com novos endpoints.
+- Expandir a suíte com novos endpoints;
+- Adicionar mais validações de contrato e estrutura de resposta.
 
 ---
 
