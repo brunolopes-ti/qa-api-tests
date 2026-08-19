@@ -5,13 +5,13 @@
 ![REST API](https://img.shields.io/badge/REST-API%20Testing-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-Test%20Scripts-yellow)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-blue)
-![JSON](https://img.shields.io/badge/JSON-Payload%20Validation-lightgrey)
+![JSON](https://img.shields.io/badge/JSON-Schema%20Validation-lightgrey)
 
 ![API Tests - Newman](https://github.com/brunolopes-ti/qa-api-tests/actions/workflows/api-tests.yml/badge.svg)
 
-Projeto prático de **testes de API REST** utilizando Postman, Newman, JavaScript e JSONPlaceholder.
+Projeto prático de **testes automatizados de API REST** utilizando Postman, Newman e JavaScript.
 
-O projeto demonstra criação e execução de uma suíte de testes de API, validação de endpoints, métodos HTTP, status codes, payloads JSON, scripts JavaScript, uso de variáveis, execução via terminal e integração contínua com **GitHub Actions**.
+O projeto foi desenvolvido em duas etapas: uma suíte inicial utilizando **JSONPlaceholder**, voltada aos fundamentos de testes de API, e uma suíte avançada utilizando **Restful Booker**, contemplando autenticação, variáveis de ambiente, encadeamento de requisições, CRUD completo, validação de schema, testes negativos e execução automatizada em CI/CD.
 
 ---
 
@@ -21,78 +21,116 @@ O projeto demonstra criação e execução de uma suíte de testes de API, valid
 - Newman;
 - JavaScript;
 - Node.js;
+- npm;
 - REST API;
 - JSON;
+- JSON Schema;
 - JSONPlaceholder;
+- Restful Booker;
 - GitHub Actions;
-- npm;
 - Git;
 - GitHub;
-- Markdown;
 - Visual Studio Code.
-
----
-
-## API utilizada
-
-Aplicação utilizada nos testes:
-
-[JSONPlaceholder](https://jsonplaceholder.typicode.com/)
-
-O JSONPlaceholder é uma API REST pública utilizada para estudos e práticas de testes, permitindo trabalhar com operações de consulta, criação, atualização e exclusão de recursos.
 
 ---
 
 ## Objetivo do projeto
 
-Demonstrar práticas de testes de API REST utilizando Postman e Newman, cobrindo diferentes métodos HTTP e validações comuns no trabalho de QA.
+Demonstrar conhecimentos práticos em testes de API REST, desde validações fundamentais até a construção de fluxos automatizados com dependência entre requisições.
 
-A collection foi criada no Postman e posteriormente integrada à execução via terminal com Newman.
+O projeto contempla:
 
-O projeto também possui pipeline configurado com GitHub Actions, permitindo que a suíte de testes seja executada automaticamente durante eventos de `push` e `pull_request`.
-
----
-
-## Escopo dos testes
-
-A suíte contempla os seguintes métodos HTTP:
-
-- `GET`;
-- `POST`;
-- `PATCH`;
-- `DELETE`.
-
-Também foram aplicadas validações envolvendo:
-
-- Status codes;
-- Dados retornados pela API;
-- Payload JSON;
-- Estrutura básica da resposta;
-- Campos esperados;
-- Armazenamento de variáveis;
-- Reaproveitamento de dados entre requisições;
-- Scripts JavaScript no Postman;
+- Criação e organização de collections no Postman;
+- Métodos HTTP;
+- Validação de status codes;
+- Validação de payloads JSON;
+- Scripts JavaScript;
+- Assertions;
+- Variáveis de ambiente;
+- Autenticação por token;
+- Encadeamento de requisições;
+- CRUD completo;
+- Validação de JSON Schema;
+- Testes positivos e negativos;
 - Execução via Newman;
-- Execução automatizada com GitHub Actions.
+- Scripts npm;
+- Integração contínua com GitHub Actions;
+- Registro de evidências.
 
 ---
 
-## Estrutura do projeto
+# APIs utilizadas
+
+## JSONPlaceholder
+
+API REST pública utilizada na etapa inicial do projeto para prática dos fundamentos de testes de API.
+
+Foram trabalhadas operações de:
+
+- Consulta;
+- Criação;
+- Atualização parcial;
+- Exclusão.
+
+---
+
+## Restful Booker
+
+API pública utilizada para evolução da suíte e implementação de cenários mais próximos de fluxos reais.
+
+Com ela foram praticados:
+
+- Health Check;
+- Autenticação;
+- Geração e armazenamento de token;
+- Criação dinâmica de booking;
+- Armazenamento de `bookingId`;
+- Consulta;
+- Atualização completa com `PUT`;
+- Atualização parcial com `PATCH`;
+- Exclusão;
+- Validação da exclusão;
+- JSON Schema;
+- Testes negativos.
+
+---
+
+# Estrutura do projeto
 
 ```text
 qa-api-tests/
 ├── .github/
 │   └── workflows/
 │       └── api-tests.yml
+│
 ├── collections/
-│   └── QA Lab - API Tests (JSONPlaceholder).postman_collection.json
+│   ├── QA Lab - API Tests (JSONPlaceholder).postman_collection.json
+│   └── QA API Advanced - Restful Booker.postman_collection.json
+│
+├── environments/
+│   └── Restful Booker - QA.postman_environment.json
+│
 ├── prints/
 │   ├── get-tests.png
 │   ├── post-tests.png
 │   ├── patch-tests.png
 │   ├── delete-tests.png
 │   ├── newman-run-passando.png
-│   └── github-actions-api-tests-passando.png
+│   ├── newman-restful-booker-success.png
+│   ├── newman-all-api-tests-success.png
+│   ├── restful-booker-health-check.png
+│   ├── restful-booker-create-booking.png
+│   ├── restful-booker-get-booking.png
+│   ├── restful-booker-schema-validation.png
+│   ├── restful-booker-put-booking.png
+│   ├── restful-booker-patch-booking.png
+│   ├── restful-booker-delete-booking.png
+│   ├── restful-booker-delete-validation.png
+│   ├── restful-booker-invalid-auth.png
+│   ├── restful-booker-update-without-auth.png
+│   ├── restful-booker-invalid-payload.png
+│   └── github-actions-api-tests-job-success.png
+│
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
@@ -101,7 +139,9 @@ qa-api-tests/
 
 ---
 
-# Collection Postman
+# Suíte 1 - JSONPlaceholder
+
+A primeira collection foi criada para praticar os fundamentos de testes automatizados de APIs REST.
 
 Arquivo:
 
@@ -109,142 +149,386 @@ Arquivo:
 collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json
 ```
 
-A collection contém as requisições e respectivos scripts de teste utilizados para validar as operações da API.
+## Cenários
 
-Os testes foram implementados utilizando JavaScript no Postman para verificar propriedades das respostas e critérios esperados para cada endpoint.
+### CT-01 - GET - Consultar posts
 
----
-
-# Cenários testados
-
-## CT-01 - GET - Consultar posts
-
-**Objetivo:** validar a consulta de recursos disponíveis na API.
-
-### Validações realizadas
+Validações:
 
 - Status code `200`;
-- Retorno de uma lista de posts;
-- Presença de dados na resposta;
-- Estrutura esperada no payload JSON.
+- Retorno de dados;
+- Estrutura da resposta.
 
-### Evidência
+### CT-02 - POST - Criar recurso
 
-```text
-prints/get-tests.png
-```
-
-![GET Tests](prints/get-tests.png)
-
----
-
-## CT-02 - POST - Criar recurso
-
-**Objetivo:** validar o envio de uma requisição para criação de recurso.
-
-### Validações realizadas
+Validações:
 
 - Status code `201`;
 - Retorno de ID;
-- Validação dos dados enviados no payload;
-- Armazenamento do ID retornado em variável.
+- Dados enviados no payload;
+- Armazenamento de variável.
 
-### Evidência
+### CT-03 - PATCH - Atualizar recurso
 
-```text
-prints/post-tests.png
-```
-
-![POST Tests](prints/post-tests.png)
-
----
-
-## CT-03 - PATCH - Atualizar recurso
-
-**Objetivo:** validar a atualização parcial de um recurso.
-
-### Validações realizadas
+Validações:
 
 - Status code `200`;
-- Retorno do campo atualizado;
-- Validação do conteúdo alterado.
+- Atualização parcial;
+- Conteúdo retornado.
+
+### CT-04 - DELETE - Remover recurso
+
+Validações:
+
+- Status esperado;
+- Execução da operação de exclusão.
+
+---
+
+## Resultado da suíte básica
+
+Execução com Newman:
+
+```text
+Requests:    4
+Assertions: 11
+Failures:    0
+Resultado:  Passed
+```
 
 ### Evidência
 
-```text
-prints/patch-tests.png
-```
-
-![PATCH Tests](prints/patch-tests.png)
+![Newman JSONPlaceholder](prints/newman-run-passando.png)
 
 ---
 
-## CT-04 - DELETE - Remover recurso
+# Suíte 2 - Restful Booker
 
-**Objetivo:** validar a execução da operação de exclusão.
+A segunda collection representa a evolução técnica do projeto.
 
-### Validações realizadas
+Arquivo:
 
-- Status code `200` ou `204`;
-- Confirmação da execução da requisição `DELETE`.
+```text
+collections/QA API Advanced - Restful Booker.postman_collection.json
+```
+
+Environment:
+
+```text
+environments/Restful Booker - QA.postman_environment.json
+```
+
+A suíte contém **11 requisições** e **36 assertions automatizadas**.
+
+---
+
+## CT-01 - Health Check
+
+```http
+GET /ping
+```
+
+Validações:
+
+- Status code `201`;
+- Tempo de resposta inferior ao limite definido.
 
 ### Evidência
 
-```text
-prints/delete-tests.png
-```
-
-![DELETE Tests](prints/delete-tests.png)
+![Health Check](prints/restful-booker-health-check.png)
 
 ---
 
-# Fluxo da suíte
+## CT-02 - Gerar token de autenticação
 
-O fluxo utilizado no projeto pode ser representado por:
-
-```text
-Postman
-   ↓
-Collection
-   ↓
-Requisições HTTP
-   ↓
-API REST
-   ↓
-Resposta JSON
-   ↓
-Scripts JavaScript
-   ↓
-Assertions
-   ↓
-Newman
-   ↓
-GitHub Actions
+```http
+POST /auth
 ```
 
-Essa estrutura permite executar as mesmas validações tanto no Postman quanto fora da interface gráfica.
+Validações:
+
+- Status code `200`;
+- Presença do token;
+- Armazenamento automático no Environment.
+
+O token retornado pela API é armazenado dinamicamente:
+
+```javascript
+pm.environment.set("token", response.token);
+```
 
 ---
 
-# Uso de variáveis
+## CT-03 - Criar booking
 
-O projeto utiliza variáveis para armazenar e reaproveitar informações retornadas pelas requisições.
+```http
+POST /booking
+```
 
-Um dos exemplos é o armazenamento do ID retornado após uma operação de criação.
+Validações:
 
-Esse tipo de abordagem permite trabalhar com dados de maneira dinâmica e preparar a suíte para fluxos onde uma requisição depende de informações obtidas anteriormente.
+- Status code `200`;
+- Retorno de `bookingid`;
+- Dados enviados;
+- Armazenamento dinâmico do ID.
+
+```javascript
+pm.environment.set("bookingId", response.bookingid);
+```
+
+### Evidência
+
+![Create Booking](prints/restful-booker-create-booking.png)
+
+---
+
+## CT-04 - Consultar booking criado
+
+```http
+GET /booking/{{bookingId}}
+```
+
+Validações:
+
+- Status code `200`;
+- Nome;
+- Sobrenome;
+- Valor;
+- Datas;
+- Necessidade adicional;
+- Schema JSON.
+
+### JSON Schema
+
+A estrutura da resposta também é validada utilizando JSON Schema.
+
+Exemplo:
+
+```javascript
+pm.test("Schema da resposta deve ser válido", function () {
+    pm.response.to.have.jsonSchema(schema);
+});
+```
+
+### Evidência
+
+![Schema Validation](prints/restful-booker-schema-validation.png)
+
+---
+
+## CT-05 - Atualizar booking com PUT
+
+```http
+PUT /booking/{{bookingId}}
+```
+
+A requisição utiliza o token criado anteriormente:
+
+```text
+Cookie: token={{token}}
+```
+
+Validações:
+
+- Status code `200`;
+- Atualização dos dados;
+- Alteração do valor;
+- Alteração do depósito;
+- Atualização das datas.
+
+### Evidência
+
+![PUT Booking](prints/restful-booker-put-booking.png)
+
+---
+
+## CT-06 - Atualizar booking com PATCH
+
+```http
+PATCH /booking/{{bookingId}}
+```
+
+Validações:
+
+- Atualização parcial;
+- Campos alterados;
+- Preservação dos campos não modificados.
+
+### Evidência
+
+![PATCH Booking](prints/restful-booker-patch-booking.png)
+
+---
+
+## CT-07 - Excluir booking
+
+```http
+DELETE /booking/{{bookingId}}
+```
+
+Validações:
+
+- Status code `201`;
+- Confirmação da exclusão.
+
+### Evidência
+
+![DELETE Booking](prints/restful-booker-delete-booking.png)
+
+---
+
+## CT-08 - Validar exclusão
+
+Após a exclusão, uma nova consulta é realizada:
+
+```http
+GET /booking/{{bookingId}}
+```
+
+Resultado esperado:
+
+```text
+404 Not Found
+```
+
+Isso confirma que o recurso excluído não pode mais ser consultado.
+
+### Evidência
+
+![Delete Validation](prints/restful-booker-delete-validation.png)
+
+---
+
+# Testes negativos
+
+Além do fluxo principal, foram implementados cenários negativos.
+
+---
+
+## CT-09 - Autenticação com credenciais inválidas
+
+```http
+POST /auth
+```
+
+É enviada uma senha inválida.
+
+Resultado retornado:
+
+```json
+{
+  "reason": "Bad credentials"
+}
+```
+
+Validações:
+
+- Resposta da API;
+- Mensagem de credenciais inválidas;
+- Ausência de token.
+
+### Evidência
+
+![Invalid Authentication](prints/restful-booker-invalid-auth.png)
+
+---
+
+## CT-10 - Atualização sem autenticação
+
+Tentativa de atualizar um booking sem token válido.
+
+Resultado esperado:
+
+```text
+403 Forbidden
+```
+
+Validações:
+
+- Acesso bloqueado;
+- Operação protegida contra requisição não autenticada.
+
+### Evidência
+
+![Unauthorized Update](prints/restful-booker-update-without-auth.png)
+
+---
+
+## CT-11 - Payload inválido
+
+É enviado um payload propositalmente inválido contendo campos ausentes e tipos incorretos.
+
+O objetivo é validar que a criação não seja concluída com sucesso.
+
+A API de laboratório utilizada pode responder com erro `400` ou `500` nesse cenário, portanto o teste valida a rejeição da operação.
+
+### Evidência
+
+![Invalid Payload](prints/restful-booker-invalid-payload.png)
+
+---
+
+# Environment
+
+O projeto utiliza um Environment do Postman para evitar valores fixos dentro das requisições.
+
+Variáveis utilizadas:
+
+```text
+baseUrl
+username
+password
+token
+bookingId
+```
+
+Exemplo:
+
+```text
+{{baseUrl}}/booking/{{bookingId}}
+```
+
+Os valores de `token` e `bookingId` ficam inicialmente vazios e são preenchidos dinamicamente durante a execução.
+
+Isso permite que a suíte seja executada de forma independente, sem necessidade de inserir manualmente IDs ou tokens gerados anteriormente.
+
+---
+
+# Encadeamento de requisições
+
+A suíte avançada possui dependência controlada entre requisições.
+
+```text
+Health Check
+      ↓
+Autenticação
+      ↓
+Token
+      ↓
+Criar Booking
+      ↓
+bookingId
+      ↓
+Consultar
+      ↓
+PUT
+      ↓
+PATCH
+      ↓
+DELETE
+      ↓
+Validar 404
+```
+
+Dessa forma, valores retornados pela API são reutilizados automaticamente nos próximos cenários.
 
 ---
 
 # Execução com Newman
 
-A collection também foi configurada para ser executada via terminal utilizando **Newman**.
+O projeto pode ser executado fora da interface gráfica do Postman utilizando Newman.
 
-Isso permite executar os testes sem depender da interface gráfica do Postman e facilita a integração da suíte com pipelines de CI/CD.
-
----
-
-## Instalação das dependências
+Instale as dependências:
 
 ```bash
 npm install
@@ -252,72 +536,98 @@ npm install
 
 ---
 
-## Executar a suíte
+## Executar somente a suíte básica
+
+```bash
+npm run api:basic
+```
+
+---
+
+## Executar somente a suíte avançada
+
+```bash
+npm run api:advanced
+```
+
+---
+
+## Executar todo o projeto
 
 ```bash
 npm run api
 ```
 
-Também é possível executar diretamente com Newman:
-
-```bash
-npx newman run "collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json"
-```
+O comando completo executa primeiro a suíte JSONPlaceholder e, em seguida, a suíte Restful Booker.
 
 ---
 
-# Script npm
+# Scripts npm
 
-O projeto possui o seguinte script no `package.json`:
+Configuração disponível no `package.json`:
 
 ```json
 "scripts": {
-  "api": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\""
+  "api": "npm run api:basic && npm run api:advanced",
+  "api:basic": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\"",
+  "api:advanced": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\""
 }
 ```
 
-Isso permite executar toda a suíte com:
+---
+
+# Resultado da suíte avançada
+
+Resultado obtido com Newman:
+
+```text
+Iterations:     1
+Requests:      11
+Test Scripts:  11
+Assertions:    36
+Failures:       0
+```
+
+Tempo registrado na execução:
+
+```text
+Total duration: 3.2s
+Average response time: ~195ms
+```
+
+### Evidência
+
+![Newman Restful Booker](prints/newman-restful-booker-success.png)
+
+---
+
+# Execução completa
+
+As duas collections também foram executadas em sequência utilizando:
 
 ```bash
 npm run api
 ```
 
----
-
-# Resultado da execução via terminal
-
-A collection foi executada com Newman e apresentou o seguinte resultado:
-
-```text
-iterations:          1 executada / 0 falhas
-requests:            4 executadas / 0 falhas
-test-scripts:        8 executados / 0 falhas
-prerequest-scripts:  5 executados / 0 falhas
-assertions:         11 executadas / 0 falhas
-```
-
-Resumo:
-
-| **Indicador** | **Resultado** |
-|---|---:|
-| Requisições | 4 |
-| Test Scripts | 8 |
-| Pre-request Scripts | 5 |
-| Assertions | 11 |
-| Falhas | 0 |
-| Resultado | Passed |
+A execução concluiu sem falhas.
 
 ### Evidência
 
-![Newman Run Passando](prints/newman-run-passando.png)
+![Newman All API Tests](prints/newman-all-api-tests-success.png)
 
 ---
 
-# Execução automatizada com GitHub Actions
+# GitHub Actions - CI/CD
 
-O projeto possui workflow configurado com **GitHub Actions** para executar automaticamente os testes de API com Newman.
+O projeto possui pipeline configurado com **GitHub Actions**.
 
-O workflow é acionado nos eventos:
+Arquivo:
+
+```text
+.github/workflows/api-tests.yml
+```
+
+O workflow é acionado automaticamente em:
 
 ```text
 push
@@ -330,86 +640,100 @@ na branch:
 main
 ```
 
-### Etapas do pipeline
-
-- Checkout do repositório;
-- Configuração do Node.js;
-- Instalação das dependências com `npm ci`;
-- Execução da suíte de API com `npm run api`.
-
-Arquivo:
+Etapas do pipeline:
 
 ```text
-.github/workflows/api-tests.yml
+Checkout repository
+        ↓
+Setup Node.js
+        ↓
+npm ci
+        ↓
+npm run api
+        ↓
+Newman
+        ↓
+Resultado dos testes
 ```
 
-### Evidência
-
-![GitHub Actions API Tests passando](prints/github-actions-api-tests-passando.png)
+Como `npm run api` executa as duas collections, tanto a suíte básica quanto a suíte avançada fazem parte da validação automatizada do pipeline.
 
 ---
 
-# Workflow GitHub Actions
+## Resultado no GitHub Actions
 
-Configuração utilizada:
+A execução automatizada foi concluída com sucesso após o envio da suíte avançada ao repositório.
 
-```yaml
-name: API Tests - Newman
+### Evidência
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+![GitHub Actions Success](prints/github-actions-api-tests-job-success.png)
 
-jobs:
-  api-tests:
-    name: Run API Tests with Newman
-    runs-on: ubuntu-latest
+---
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+# Fluxo completo do projeto
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: lts/*
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run API tests
-        run: npm run api
+```text
+Postman
+   ↓
+Collections
+   ↓
+Environment
+   ↓
+Requisições HTTP
+   ↓
+API REST
+   ↓
+Resposta JSON
+   ↓
+Scripts JavaScript
+   ↓
+Assertions
+   ↓
+Variáveis dinâmicas
+   ↓
+Newman
+   ↓
+npm
+   ↓
+GitHub Actions
+   ↓
+CI/CD
 ```
 
 ---
 
 # Boas práticas aplicadas
 
-- Organização da collection em pasta específica;
-- Separação dos cenários por método HTTP;
+- Separação entre suíte básica e avançada;
+- Organização das collections;
+- Environment separado da collection;
+- URLs parametrizadas;
+- Variáveis dinâmicas;
+- Reaproveitamento de dados;
+- Autenticação por token;
+- Encadeamento de requisições;
 - Validação de status codes;
-- Validação de payload JSON;
-- Scripts JavaScript no Postman;
-- Uso de assertions;
-- Uso de variáveis;
-- Reaproveitamento de dados entre requisições;
-- Execução via terminal com Newman;
-- Script npm para simplificar a execução;
-- Execução automatizada com GitHub Actions;
-- Pipeline acionado em `push` e `pull_request`;
+- Validação de payloads;
+- JSON Schema Validation;
+- Testes positivos;
+- Testes negativos;
+- CRUD completo;
+- Scripts JavaScript;
+- Assertions automatizadas;
+- Execução via CLI;
+- Automação com Newman;
+- Scripts npm;
+- Integração contínua;
+- GitHub Actions;
 - Registro de evidências;
-- Documentação técnica;
-- Controle de dependências com `package.json`;
-- Uso de `.gitignore`;
-- Versionamento com Git e GitHub.
+- Versionamento com Git e GitHub;
+- Documentação técnica.
 
 ---
 
 # Competências demonstradas
 
-Este projeto demonstra conhecimentos práticos em:
+Este projeto demonstra prática em:
 
 - Quality Assurance;
 - API Testing;
@@ -419,25 +743,34 @@ Este projeto demonstra conhecimentos práticos em:
 - JavaScript;
 - Node.js;
 - JSON;
+- JSON Schema;
 - Métodos HTTP;
-- `GET`;
-- `POST`;
-- `PATCH`;
-- `DELETE`;
+- GET;
+- POST;
+- PUT;
+- PATCH;
+- DELETE;
 - Status codes;
+- Headers;
+- Cookies;
 - Payloads;
 - Assertions;
-- Scripts de teste;
-- Pre-request Scripts;
-- Variáveis;
+- Test Scripts;
+- Variáveis de ambiente;
+- Autenticação;
+- Tokens;
 - Encadeamento de dados;
+- CRUD;
+- Testes negativos;
+- Schema Validation;
 - Execução via CLI;
 - Automação de testes de API;
+- npm;
 - GitHub Actions;
 - CI/CD;
 - Git;
 - GitHub;
-- Evidências de execução;
+- Evidências;
 - Documentação técnica.
 
 ---
@@ -446,38 +779,49 @@ Este projeto demonstra conhecimentos práticos em:
 
 **Concluído nesta etapa.**
 
-O projeto atualmente demonstra:
+O projeto atualmente possui:
 
-- Collection criada no Postman;
-- 4 requisições REST;
-- Métodos GET, POST, PATCH e DELETE;
-- Scripts JavaScript;
-- Uso de variáveis;
-- Validação de payloads;
-- Validação de status codes;
-- 11 assertions executadas;
-- Execução via Newman;
-- 0 falhas na execução registrada;
-- Script npm;
+- 2 collections;
+- 2 APIs públicas utilizadas;
+- 15 requisições entre as duas suítes;
+- 47 assertions nas execuções documentadas;
+- CRUD completo na suíte avançada;
+- Environment;
+- Autenticação e token;
+- Variáveis dinâmicas;
+- Encadeamento entre requisições;
+- JSON Schema Validation;
+- Testes negativos;
+- Newman;
+- Scripts npm;
 - Pipeline com GitHub Actions;
-- Evidências de execução;
-- Documentação no GitHub.
+- Execução local sem falhas;
+- Execução em CI/CD com sucesso;
+- Evidências documentadas.
+
+---
+
+# Observação sobre a API de laboratório
+
+O Restful Booker é uma API pública destinada a estudos e testes.
+
+Os dados podem ser reinicializados periodicamente pela própria aplicação. Por esse motivo, a suíte cria dinamicamente um novo booking e utiliza o ID retornado durante a própria execução, reduzindo dependência de dados previamente existentes.
 
 ---
 
 # Próximas melhorias possíveis
 
-- Criar arquivo de Environment do Postman;
-- Expandir o uso de variáveis de ambiente;
-- Trabalhar autenticação e tokens;
-- Adicionar testes negativos;
-- Adicionar validações de schema JSON;
-- Expandir o encadeamento entre requisições;
-- Trabalhar dados de teste externos;
-- Adicionar relatório HTML do Newman;
-- Expandir a suíte para uma API com persistência real de dados;
-- Explorar fluxos autenticados;
-- Evoluir posteriormente para cenários envolvendo OAuth 2.0 e webhooks.
+O projeto está concluído para o escopo atual.
+
+Possíveis evoluções futuras incluem:
+
+- Dados de teste externos;
+- Relatório HTML do Newman;
+- Mocks e stubs;
+- Testes de contrato;
+- Segurança de APIs;
+- OAuth 2.0 em uma API compatível;
+- Webhooks em uma API compatível.
 
 ---
 
