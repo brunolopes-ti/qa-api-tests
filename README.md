@@ -1,78 +1,92 @@
-# QA API Tests - JSONPlaceholder
+# QA API Tests - Postman, Newman e REST API
+
+![Postman](https://img.shields.io/badge/Postman-API%20Testing-orange)
+![Newman](https://img.shields.io/badge/Newman-CLI%20Automation-orange)
+![REST API](https://img.shields.io/badge/REST-API%20Testing-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-Test%20Scripts-yellow)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-blue)
+![JSON](https://img.shields.io/badge/JSON-Payload%20Validation-lightgrey)
 
 ![API Tests - Newman](https://github.com/brunolopes-ti/qa-api-tests/actions/workflows/api-tests.yml/badge.svg)
 
-Projeto prático de testes de API REST utilizando Postman, Newman, JavaScript e JSONPlaceholder.
+Projeto prático de **testes de API REST** utilizando Postman, Newman, JavaScript e JSONPlaceholder.
 
-O objetivo deste projeto é demonstrar conhecimentos em testes de API, validação de endpoints, métodos HTTP, status code, payload JSON, scripts de teste, uso de variáveis, execução via terminal, execução automatizada com GitHub Actions e documentação de evidências.
+O projeto demonstra criação e execução de uma suíte de testes de API, validação de endpoints, métodos HTTP, status codes, payloads JSON, scripts JavaScript, uso de variáveis, execução via terminal e integração contínua com **GitHub Actions**.
 
 ---
 
 ## Tecnologias utilizadas
 
-- Postman
-- Newman
-- JavaScript
-- Node.js
-- JSONPlaceholder
-- GitHub Actions
-- Git
-- GitHub
-- Markdown
+- Postman;
+- Newman;
+- JavaScript;
+- Node.js;
+- REST API;
+- JSON;
+- JSONPlaceholder;
+- GitHub Actions;
+- npm;
+- Git;
+- GitHub;
+- Markdown;
+- Visual Studio Code.
 
 ---
 
 ## API utilizada
 
-Aplicação utilizada para testes:
+Aplicação utilizada nos testes:
 
 [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 
-O JSONPlaceholder é uma API REST pública utilizada para estudos e práticas de testes, permitindo validar operações como consulta, criação, atualização e exclusão de recursos.
+O JSONPlaceholder é uma API REST pública utilizada para estudos e práticas de testes, permitindo trabalhar com operações de consulta, criação, atualização e exclusão de recursos.
 
 ---
 
 ## Objetivo do projeto
 
-Este projeto tem como finalidade demonstrar a prática de testes de API REST, cobrindo diferentes métodos HTTP e validações comuns em cenários de QA.
+Demonstrar práticas de testes de API REST utilizando Postman e Newman, cobrindo diferentes métodos HTTP e validações comuns no trabalho de QA.
 
-A collection foi criada no Postman e posteriormente executada via terminal utilizando Newman.
+A collection foi criada no Postman e posteriormente integrada à execução via terminal com Newman.
 
-Além disso, o projeto possui pipeline configurado com GitHub Actions, permitindo a execução automática dos testes de API a cada alteração enviada para o repositório.
+O projeto também possui pipeline configurado com GitHub Actions, permitindo que a suíte de testes seja executada automaticamente durante eventos de `push` e `pull_request`.
 
 ---
 
 ## Escopo dos testes
 
-A suíte cobre os seguintes métodos HTTP:
+A suíte contempla os seguintes métodos HTTP:
 
-- GET
-- POST
-- PATCH
-- DELETE
+- `GET`;
+- `POST`;
+- `PATCH`;
+- `DELETE`.
 
-Também foram aplicadas validações como:
+Também foram aplicadas validações envolvendo:
 
-- Status code da resposta;
-- Retorno de dados esperados;
-- Estrutura de payload JSON;
+- Status codes;
+- Dados retornados pela API;
+- Payload JSON;
+- Estrutura básica da resposta;
+- Campos esperados;
 - Armazenamento de variáveis;
-- Encadeamento de dados entre requisições;
-- Execução automatizada via terminal com Newman;
-- Execução automatizada via GitHub Actions.
+- Reaproveitamento de dados entre requisições;
+- Scripts JavaScript no Postman;
+- Execução via Newman;
+- Execução automatizada com GitHub Actions.
 
 ---
 
 ## Estrutura do projeto
 
 ```text
-qa-api-tests
-├── .github
-│   └── workflows
+qa-api-tests/
+├── .github/
+│   └── workflows/
 │       └── api-tests.yml
-├── collections
+├── collections/
 │   └── QA Lab - API Tests (JSONPlaceholder).postman_collection.json
-├── prints
+├── prints/
 │   ├── get-tests.png
 │   ├── post-tests.png
 │   ├── patch-tests.png
@@ -87,31 +101,34 @@ qa-api-tests
 
 ---
 
-## Collection Postman
+# Collection Postman
 
-Arquivo da collection:
+Arquivo:
 
 ```text
 collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json
 ```
 
-A collection contém requisições organizadas para validar operações básicas de uma API REST.
+A collection contém as requisições e respectivos scripts de teste utilizados para validar as operações da API.
+
+Os testes foram implementados utilizando JavaScript no Postman para verificar propriedades das respostas e critérios esperados para cada endpoint.
 
 ---
 
-## Cenários testados
+# Cenários testados
 
-### CT-01 - GET - Consultar posts
+## CT-01 - GET - Consultar posts
 
-**Objetivo:** validar a consulta de dados da API.
+**Objetivo:** validar a consulta de recursos disponíveis na API.
 
-**Validações realizadas:**
+### Validações realizadas
 
-- Status code 200;
-- Retorno de lista de posts;
-- Estrutura esperada no corpo da resposta.
+- Status code `200`;
+- Retorno de uma lista de posts;
+- Presença de dados na resposta;
+- Estrutura esperada no payload JSON.
 
-**Evidência:**
+### Evidência
 
 ```text
 prints/get-tests.png
@@ -121,18 +138,18 @@ prints/get-tests.png
 
 ---
 
-### CT-02 - POST - Criar recurso
+## CT-02 - POST - Criar recurso
 
-**Objetivo:** validar a criação de um novo recurso via API.
+**Objetivo:** validar o envio de uma requisição para criação de recurso.
 
-**Validações realizadas:**
+### Validações realizadas
 
-- Status code 201;
+- Status code `201`;
 - Retorno de ID;
 - Validação dos dados enviados no payload;
-- Armazenamento do ID criado em variável.
+- Armazenamento do ID retornado em variável.
 
-**Evidência:**
+### Evidência
 
 ```text
 prints/post-tests.png
@@ -142,17 +159,17 @@ prints/post-tests.png
 
 ---
 
-### CT-03 - PATCH - Atualizar recurso
+## CT-03 - PATCH - Atualizar recurso
 
-**Objetivo:** validar a atualização parcial de um recurso existente.
+**Objetivo:** validar a atualização parcial de um recurso.
 
-**Validações realizadas:**
+### Validações realizadas
 
-- Status code 200;
+- Status code `200`;
 - Retorno do campo atualizado;
 - Validação do conteúdo alterado.
 
-**Evidência:**
+### Evidência
 
 ```text
 prints/patch-tests.png
@@ -162,16 +179,16 @@ prints/patch-tests.png
 
 ---
 
-### CT-04 - DELETE - Remover recurso
+## CT-04 - DELETE - Remover recurso
 
-**Objetivo:** validar a exclusão de um recurso via API.
+**Objetivo:** validar a execução da operação de exclusão.
 
-**Validações realizadas:**
+### Validações realizadas
 
-- Status code 200 ou 204;
-- Confirmação da execução da requisição DELETE.
+- Status code `200` ou `204`;
+- Confirmação da execução da requisição `DELETE`.
 
-**Evidência:**
+### Evidência
 
 ```text
 prints/delete-tests.png
@@ -181,29 +198,67 @@ prints/delete-tests.png
 
 ---
 
-## Execução com Newman
+# Fluxo da suíte
 
-Além da execução pelo Postman, a collection também foi configurada para ser executada via terminal utilizando Newman.
+O fluxo utilizado no projeto pode ser representado por:
 
-Essa prática permite rodar os testes de API fora da interface gráfica do Postman, aproximando o projeto de um fluxo mais utilizado em automação e integração contínua.
+```text
+Postman
+   ↓
+Collection
+   ↓
+Requisições HTTP
+   ↓
+API REST
+   ↓
+Resposta JSON
+   ↓
+Scripts JavaScript
+   ↓
+Assertions
+   ↓
+Newman
+   ↓
+GitHub Actions
+```
+
+Essa estrutura permite executar as mesmas validações tanto no Postman quanto fora da interface gráfica.
 
 ---
 
-## Como executar o projeto
+# Uso de variáveis
 
-Instale as dependências:
+O projeto utiliza variáveis para armazenar e reaproveitar informações retornadas pelas requisições.
+
+Um dos exemplos é o armazenamento do ID retornado após uma operação de criação.
+
+Esse tipo de abordagem permite trabalhar com dados de maneira dinâmica e preparar a suíte para fluxos onde uma requisição depende de informações obtidas anteriormente.
+
+---
+
+# Execução com Newman
+
+A collection também foi configurada para ser executada via terminal utilizando **Newman**.
+
+Isso permite executar os testes sem depender da interface gráfica do Postman e facilita a integração da suíte com pipelines de CI/CD.
+
+---
+
+## Instalação das dependências
 
 ```bash
 npm install
 ```
 
-Execute a collection com Newman:
+---
+
+## Executar a suíte
 
 ```bash
 npm run api
 ```
 
-Também é possível executar diretamente com:
+Também é possível executar diretamente com Newman:
 
 ```bash
 npx newman run "collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json"
@@ -211,7 +266,7 @@ npx newman run "collections/QA Lab - API Tests (JSONPlaceholder).postman_collect
 
 ---
 
-## Script configurado
+# Script npm
 
 O projeto possui o seguinte script no `package.json`:
 
@@ -221,7 +276,7 @@ O projeto possui o seguinte script no `package.json`:
 }
 ```
 
-Com isso, a suíte pode ser executada com o comando:
+Isso permite executar toda a suíte com:
 
 ```bash
 npm run api
@@ -229,66 +284,72 @@ npm run api
 
 ---
 
-## Resultado da execução via terminal
+# Resultado da execução via terminal
 
-A collection foi executada com sucesso utilizando Newman.
-
-Resultado obtido:
+A collection foi executada com Newman e apresentou o seguinte resultado:
 
 ```text
-iterations: 1 executada / 0 falhas
-requests: 4 executadas / 0 falhas
-test-scripts: 8 executados / 0 falhas
-prerequest-scripts: 5 executados / 0 falhas
-assertions: 11 executadas / 0 falhas
+iterations:          1 executada / 0 falhas
+requests:            4 executadas / 0 falhas
+test-scripts:        8 executados / 0 falhas
+prerequest-scripts:  5 executados / 0 falhas
+assertions:         11 executadas / 0 falhas
 ```
 
-**Evidência da execução com Newman:**
+Resumo:
 
-```text
-prints/newman-run-passando.png
-```
+| **Indicador** | **Resultado** |
+|---|---:|
+| Requisições | 4 |
+| Test Scripts | 8 |
+| Pre-request Scripts | 5 |
+| Assertions | 11 |
+| Falhas | 0 |
+| Resultado | Passed |
+
+### Evidência
 
 ![Newman Run Passando](prints/newman-run-passando.png)
 
 ---
 
-## Execução automatizada com GitHub Actions
+# Execução automatizada com GitHub Actions
 
-Este projeto possui um workflow configurado com GitHub Actions para executar automaticamente os testes de API com Newman.
+O projeto possui workflow configurado com **GitHub Actions** para executar automaticamente os testes de API com Newman.
 
-O workflow é acionado automaticamente em eventos de `push` e `pull_request` na branch `main`.
+O workflow é acionado nos eventos:
 
-Etapas executadas no pipeline:
+```text
+push
+pull_request
+```
+
+na branch:
+
+```text
+main
+```
+
+### Etapas do pipeline
 
 - Checkout do repositório;
 - Configuração do Node.js;
 - Instalação das dependências com `npm ci`;
-- Execução dos testes de API com `npm run api`.
-
-Arquivo de configuração:
-
-```text
-.github/workflows/api-tests.yml
-```
-
-Evidência da execução no GitHub Actions:
-
-```text
-prints/github-actions-api-tests-passando.png
-```
-
-![GitHub Actions API Tests passando](prints/github-actions-api-tests-passando.png)
-
----
-
-## Workflow GitHub Actions
+- Execução da suíte de API com `npm run api`.
 
 Arquivo:
 
 ```text
 .github/workflows/api-tests.yml
 ```
+
+### Evidência
+
+![GitHub Actions API Tests passando](prints/github-actions-api-tests-passando.png)
+
+---
+
+# Workflow GitHub Actions
 
 Configuração utilizada:
 
@@ -324,63 +385,105 @@ jobs:
 
 ---
 
-## Boas práticas aplicadas
+# Boas práticas aplicadas
 
 - Organização da collection em pasta específica;
-- Validação de métodos HTTP;
-- Validação de status code;
+- Separação dos cenários por método HTTP;
+- Validação de status codes;
 - Validação de payload JSON;
-- Uso de scripts JavaScript no Postman;
-- Uso de variáveis para reaproveitamento de dados;
-- Execução da collection via terminal com Newman;
-- Criação de script npm para facilitar a execução;
-- Execução automatizada dos testes de API com GitHub Actions;
-- Pipeline de testes configurado para rodar a cada push ou pull request;
-- Registro de evidências visuais;
-- Documentação técnica em README;
+- Scripts JavaScript no Postman;
+- Uso de assertions;
+- Uso de variáveis;
+- Reaproveitamento de dados entre requisições;
+- Execução via terminal com Newman;
+- Script npm para simplificar a execução;
+- Execução automatizada com GitHub Actions;
+- Pipeline acionado em `push` e `pull_request`;
+- Registro de evidências;
+- Documentação técnica;
 - Controle de dependências com `package.json`;
-- Uso de `.gitignore` para evitar versionamento de dependências.
+- Uso de `.gitignore`;
+- Versionamento com Git e GitHub.
 
 ---
 
-## Aprendizados
+# Competências demonstradas
 
-Com este projeto, desenvolvi habilidades práticas em:
+Este projeto demonstra conhecimentos práticos em:
 
-- Testes de API REST;
-- Uso do Postman para criação de collections;
-- Escrita de testes automatizados com JavaScript no Postman;
-- Validação de respostas JSON e status codes;
-- Uso de variáveis dinâmicas;
-- Execução de testes de API via terminal com Newman;
-- Configuração de pipeline com GitHub Actions;
-- Organização de evidências para documentação técnica;
-- Versionamento de projeto com Git e GitHub.
+- Quality Assurance;
+- API Testing;
+- REST API;
+- Postman;
+- Newman;
+- JavaScript;
+- Node.js;
+- JSON;
+- Métodos HTTP;
+- `GET`;
+- `POST`;
+- `PATCH`;
+- `DELETE`;
+- Status codes;
+- Payloads;
+- Assertions;
+- Scripts de teste;
+- Pre-request Scripts;
+- Variáveis;
+- Encadeamento de dados;
+- Execução via CLI;
+- Automação de testes de API;
+- GitHub Actions;
+- CI/CD;
+- Git;
+- GitHub;
+- Evidências de execução;
+- Documentação técnica.
 
 ---
 
-## Status do projeto
+# Status do projeto
 
-Concluído nesta etapa.
+**Concluído nesta etapa.**
 
-Collection Postman criada, testes documentados, evidências registradas, execução via terminal configurada com Newman e pipeline automatizado com GitHub Actions.
+O projeto atualmente demonstra:
+
+- Collection criada no Postman;
+- 4 requisições REST;
+- Métodos GET, POST, PATCH e DELETE;
+- Scripts JavaScript;
+- Uso de variáveis;
+- Validação de payloads;
+- Validação de status codes;
+- 11 assertions executadas;
+- Execução via Newman;
+- 0 falhas na execução registrada;
+- Script npm;
+- Pipeline com GitHub Actions;
+- Evidências de execução;
+- Documentação no GitHub.
 
 ---
 
-## Próximas melhorias possíveis
+# Próximas melhorias possíveis
 
-- Adicionar relatório HTML do Newman;
-- Criar arquivo de environment do Postman;
-- Separar dados de teste;
+- Criar arquivo de Environment do Postman;
+- Expandir o uso de variáveis de ambiente;
+- Trabalhar autenticação e tokens;
 - Adicionar testes negativos;
-- Expandir a suíte com novos endpoints;
-- Adicionar mais validações de contrato e estrutura de resposta.
+- Adicionar validações de schema JSON;
+- Expandir o encadeamento entre requisições;
+- Trabalhar dados de teste externos;
+- Adicionar relatório HTML do Newman;
+- Expandir a suíte para uma API com persistência real de dados;
+- Explorar fluxos autenticados;
+- Evoluir posteriormente para cenários envolvendo OAuth 2.0 e webhooks.
 
 ---
 
-## Contato
+# Autor
 
-Projeto desenvolvido por Bruno Ramos Lopes.
+**Bruno Ramos Lopes**
 
-GitHub: [github.com/brunolopes-ti](https://github.com/brunolopes-ti)  
-LinkedIn: [linkedin.com/in/brunolopes-ti](https://linkedin.com/in/brunolopes-ti)
+LinkedIn: [linkedin.com/in/brunolopes-ti](https://linkedin.com/in/brunolopes-ti)  
+GitHub: [github.com/brunolopes-ti](https://github.com/brunolopes-ti)
