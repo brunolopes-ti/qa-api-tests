@@ -1,24 +1,33 @@
 {
   "name": "qa-api-tests",
   "version": "1.0.0",
-  "description": "Projeto prático de testes de API REST utilizando Postman, com validações automatizadas, uso de variáveis dinâmicas e execução de fluxo CRUD.",
+  "description": "Projeto prático de testes de API REST com Postman, Newman, JavaScript, environments, autenticação, CRUD, schema validation, testes negativos e CI/CD.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "api": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\""
+    "api": "npm run api:basic && npm run api:advanced",
+    "api:basic": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\"",
+    "api:advanced": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brunolopes-ti/qa-sql-validation.git"
+    "url": "git+https://github.com/brunolopes-ti/qa-api-tests.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "qa",
+    "api-testing",
+    "postman",
+    "newman",
+    "rest-api",
+    "javascript",
+    "quality-assurance"
+  ],
+  "author": "Bruno Ramos Lopes",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/brunolopes-ti/qa-sql-validation/issues"
+    "url": "https://github.com/brunolopes-ti/qa-api-tests/issues"
   },
-  "homepage": "https://github.com/brunolopes-ti/qa-sql-validation#readme",
+  "homepage": "https://github.com/brunolopes-ti/qa-api-tests#readme",
   "devDependencies": {
     "newman": "^6.2.2"
   }

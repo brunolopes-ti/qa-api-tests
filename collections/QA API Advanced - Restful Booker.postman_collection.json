@@ -1,0 +1,749 @@
+{
+  "info": {
+    "_postman_id": "1df01459-4bf9-40e2-8ba6-c5c8c01e98bd",
+    "name": "QA API Advanced - Restful Booker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52343012",
+    "_collection_link": "https://go.postman.co/collection/52343012-1df01459-4bf9-40e2-8ba6-c5c8c01e98bd?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Health",
+      "item": [
+        {
+          "name": "CT-01 - Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Tempo de resposta deve ser menor que 2000 ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ping",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ping"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Authentication",
+      "item": [
+        {
+          "name": "CT-02 - Gerar token de autenticação",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta deve conter um token\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"token\");\r",
+                  "    pm.expect(response.token).to.be.a(\"string\").and.not.empty;\r",
+                  "});\r",
+                  "\r",
+                  "if (response.token) {\r",
+                  "    pm.environment.set(\"token\", response.token);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Token deve ser salvo no Environment\", function () {\r",
+                  "    pm.expect(pm.environment.get(\"token\")).to.eql(response.token);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Booking CRUD",
+      "item": [
+        {
+          "name": "CT-03 - Criar booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta deve conter bookingid\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"bookingid\");\r",
+                  "    pm.expect(response.bookingid).to.be.a(\"number\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Dados do booking devem estar corretos\", function () {\r",
+                  "    pm.expect(response.booking.firstname).to.eql(\"Bruno\");\r",
+                  "    pm.expect(response.booking.lastname).to.eql(\"Ramos\");\r",
+                  "    pm.expect(response.booking.totalprice).to.eql(450);\r",
+                  "    pm.expect(response.booking.depositpaid).to.eql(true);\r",
+                  "});\r",
+                  "\r",
+                  "if (response.bookingid) {\r",
+                  "    pm.environment.set(\"bookingId\", response.bookingid);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"bookingId deve ser salvo no Environment\", function () {\r",
+                  "    pm.expect(pm.environment.get(\"bookingId\")).to.eql(response.bookingid);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstname\": \"Bruno\",\r\n  \"lastname\": \"Ramos\",\r\n  \"totalprice\": 450,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2026-09-10\",\r\n    \"checkout\": \"2026-09-15\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-04 - Consultar booking criado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Booking deve pertencer ao usuário criado\", function () {\r",
+                  "    pm.expect(response.firstname).to.eql(\"Bruno\");\r",
+                  "    pm.expect(response.lastname).to.eql(\"Ramos\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Valor total deve estar correto\", function () {\r",
+                  "    pm.expect(response.totalprice).to.eql(450);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Datas do booking devem estar corretas\", function () {\r",
+                  "    pm.expect(response.bookingdates.checkin).to.eql(\"2026-09-10\");\r",
+                  "    pm.expect(response.bookingdates.checkout).to.eql(\"2026-09-15\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Necessidade adicional deve ser Breakfast\", function () {\r",
+                  "    pm.expect(response.additionalneeds).to.eql(\"Breakfast\");\r",
+                  "});\r",
+                  "const schema = {\r",
+                  "    type: \"object\",\r",
+                  "    required: [\r",
+                  "        \"firstname\",\r",
+                  "        \"lastname\",\r",
+                  "        \"totalprice\",\r",
+                  "        \"depositpaid\",\r",
+                  "        \"bookingdates\",\r",
+                  "        \"additionalneeds\"\r",
+                  "    ],\r",
+                  "    properties: {\r",
+                  "        firstname: {\r",
+                  "            type: \"string\"\r",
+                  "        },\r",
+                  "        lastname: {\r",
+                  "            type: \"string\"\r",
+                  "        },\r",
+                  "        totalprice: {\r",
+                  "            type: \"number\"\r",
+                  "        },\r",
+                  "        depositpaid: {\r",
+                  "            type: \"boolean\"\r",
+                  "        },\r",
+                  "        bookingdates: {\r",
+                  "            type: \"object\",\r",
+                  "            required: [\r",
+                  "                \"checkin\",\r",
+                  "                \"checkout\"\r",
+                  "            ],\r",
+                  "            properties: {\r",
+                  "                checkin: {\r",
+                  "                    type: \"string\"\r",
+                  "                },\r",
+                  "                checkout: {\r",
+                  "                    type: \"string\"\r",
+                  "                }\r",
+                  "            }\r",
+                  "        },\r",
+                  "        additionalneeds: {\r",
+                  "            type: \"string\"\r",
+                  "        }\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "pm.test(\"Schema da resposta deve ser válido\", function () {\r",
+                  "    pm.response.to.have.jsonSchema(schema);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-05 - Atualizar booking com PUT",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Nome deve ter sido atualizado\", function () {\r",
+                  "    pm.expect(response.firstname).to.eql(\"Bruno\");\r",
+                  "    pm.expect(response.lastname).to.eql(\"Lopes\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Valor total deve ter sido atualizado\", function () {\r",
+                  "    pm.expect(response.totalprice).to.eql(650);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deposit paid deve ser false\", function () {\r",
+                  "    pm.expect(response.depositpaid).to.eql(false);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Dados adicionais devem ter sido atualizados\", function () {\r",
+                  "    pm.expect(response.bookingdates.checkin).to.eql(\"2026-10-01\");\r",
+                  "    pm.expect(response.bookingdates.checkout).to.eql(\"2026-10-07\");\r",
+                  "    pm.expect(response.additionalneeds).to.eql(\"Dinner\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true,
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstname\": \"Bruno\",\r\n  \"lastname\": \"Lopes\",\r\n  \"totalprice\": 650,\r\n  \"depositpaid\": false,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2026-10-01\",\r\n    \"checkout\": \"2026-10-07\"\r\n  },\r\n  \"additionalneeds\": \"Dinner\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-06 - Atualizar booking com PATCH",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Firstname deve ter sido atualizado\", function () {\r",
+                  "    pm.expect(response.firstname).to.eql(\"Bruno Henrique\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Additional needs deve ter sido atualizado\", function () {\r",
+                  "    pm.expect(response.additionalneeds).to.eql(\"Lunch\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Dados não alterados devem ser preservados\", function () {\r",
+                  "    pm.expect(response.lastname).to.eql(\"Lopes\");\r",
+                  "    pm.expect(response.totalprice).to.eql(650);\r",
+                  "    pm.expect(response.depositpaid).to.eql(false);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Datas devem permanecer inalteradas\", function () {\r",
+                  "    pm.expect(response.bookingdates.checkin).to.eql(\"2026-10-01\");\r",
+                  "    pm.expect(response.bookingdates.checkout).to.eql(\"2026-10-07\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstname\": \"Bruno Henrique\",\r\n  \"additionalneeds\": \"Lunch\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-07 - Excluir booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta deve confirmar exclusão\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Created\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-08 - Validar exclusão do booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Booking excluído não deve mais ser encontrado\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Not Found\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Negative Tests",
+      "item": [
+        {
+          "name": "CT-09 - Autenticação com credenciais inválidas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta deve informar credenciais inválidas\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"reason\");\r",
+                  "    pm.expect(response.reason).to.eql(\"Bad credentials\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta não deve conter token\", function () {\r",
+                  "    pm.expect(response).to.not.have.property(\"token\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"senha_invalida\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-10 - Atualizar booking sem autenticação",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 403\", function () {\r",
+                  "    pm.response.to.have.status(403);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Atualização sem autenticação deve ser bloqueada\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Forbidden\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstname\": \"Bruno\",\r\n  \"lastname\": \"Teste\",\r\n  \"totalprice\": 999,\r\n  \"depositpaid\": false,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2026-11-01\",\r\n    \"checkout\": \"2026-11-05\"\r\n  },\r\n  \"additionalneeds\": \"None\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-11 - Criar booking com payload inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"API deve rejeitar payload inválido\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Booking inválido não deve ser criado com sucesso\", function () {\r",
+                  "    pm.expect(pm.response.code).to.not.eql(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstname\": 123,\r\n  \"lastname\": true,\r\n  \"totalprice\": \"valor_invalido\",\r\n  \"depositpaid\": \"sim\",\r\n  \"bookingdates\": {\r\n    \"checkin\": \"data-invalida\"\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
