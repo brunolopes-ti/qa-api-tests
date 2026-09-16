@@ -11,7 +11,9 @@
 
 Projeto prático de **testes automatizados de API REST** utilizando Postman, Newman e JavaScript.
 
-O projeto foi desenvolvido em duas etapas: uma suíte inicial utilizando **JSONPlaceholder**, voltada aos fundamentos de testes de API, e uma suíte avançada utilizando **Restful Booker**, contemplando autenticação, variáveis de ambiente, encadeamento de requisições, CRUD completo, validação de schema, testes negativos e execução automatizada em CI/CD.
+O projeto foi desenvolvido em duas etapas: uma suíte inicial utilizando **JSONPlaceholder**, voltada aos fundamentos de testes de API, e uma suíte avançada utilizando **Restful Booker**, contemplando autenticação, variáveis de ambiente, encadeamento de requisições, CRUD completo, validação de schema, testes negativos, execução automatizada em pipeline e publicação de relatórios de testes.
+
+O projeto também utiliza **GitHub Actions em um fluxo de CI/CD**, executando automaticamente os testes e publicando relatórios HTML do Newman no GitHub Pages.
 
 ---
 
@@ -19,6 +21,7 @@ O projeto foi desenvolvido em duas etapas: uma suíte inicial utilizando **JSONP
 
 - Postman;
 - Newman;
+- Newman HTML Extra Reporter;
 - JavaScript;
 - Node.js;
 - npm;
@@ -28,6 +31,7 @@ O projeto foi desenvolvido em duas etapas: uma suíte inicial utilizando **JSONP
 - JSONPlaceholder;
 - Restful Booker;
 - GitHub Actions;
+- GitHub Pages;
 - Git;
 - GitHub;
 - Visual Studio Code.
@@ -36,7 +40,7 @@ O projeto foi desenvolvido em duas etapas: uma suíte inicial utilizando **JSONP
 
 ## Objetivo do projeto
 
-Demonstrar conhecimentos práticos em testes de API REST, desde validações fundamentais até a construção de fluxos automatizados com dependência entre requisições.
+Demonstrar conhecimentos práticos em testes de API REST, desde validações fundamentais até a construção de fluxos automatizados com dependência entre requisições e integração com pipeline de CI/CD.
 
 O projeto contempla:
 
@@ -54,7 +58,10 @@ O projeto contempla:
 - Testes positivos e negativos;
 - Execução via Newman;
 - Scripts npm;
+- Geração automática de relatórios HTML;
 - Integração contínua com GitHub Actions;
+- Publicação automática de relatórios;
+- GitHub Pages;
 - Registro de evidências.
 
 ---
@@ -88,6 +95,7 @@ Com ela foram praticados:
 - Consulta;
 - Atualização completa com `PUT`;
 - Atualização parcial com `PATCH`;
+- Validação de acesso sem autenticação;
 - Exclusão;
 - Validação da exclusão;
 - JSON Schema;
@@ -131,11 +139,17 @@ qa-api-tests/
 │   ├── restful-booker-invalid-payload.png
 │   └── github-actions-api-tests-job-success.png
 │
+├── reports/                         # gerado automaticamente
+│   ├── index.html
+│   └── jsonplaceholder.html
+│
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
 └── README.md
 ```
+
+A pasta `reports/` é gerada durante a execução dos scripts de relatório e não é versionada no repositório.
 
 ---
 
@@ -350,6 +364,7 @@ PATCH /booking/{{bookingId}}
 
 Validações:
 
+- Status code `200`;
 - Atualização parcial;
 - Campos alterados;
 - Preservação dos campos não modificados.
@@ -357,6 +372,36 @@ Validações:
 ### Evidência
 
 ![PATCH Booking](prints/restful-booker-patch-booking.png)
+
+---
+
+## CT-10 - Atualizar booking sem autenticação
+
+```http
+PUT /booking/{{bookingId}}
+```
+
+É realizada uma tentativa de atualizar um booking existente sem token válido.
+
+Na ordem de execução da collection, este cenário é executado após o CT-06 e antes da exclusão do booking no CT-07.
+
+Dessa forma, a validação de autenticação ocorre enquanto o recurso ainda existe.
+
+Resultado esperado:
+
+```text
+403 Forbidden
+```
+
+Validações:
+
+- Status code `403`;
+- Acesso bloqueado;
+- Operação protegida contra requisição não autenticada.
+
+### Evidência
+
+![Unauthorized Update](prints/restful-booker-update-without-auth.png)
 
 ---
 
@@ -401,7 +446,7 @@ Isso confirma que o recurso excluído não pode mais ser consultado.
 
 # Testes negativos
 
-Além do fluxo principal, foram implementados cenários negativos.
+Além das validações realizadas durante o fluxo principal, foram implementados cenários negativos adicionais.
 
 ---
 
@@ -423,6 +468,7 @@ Resultado retornado:
 
 Validações:
 
+- Status code `200`, conforme comportamento da API utilizada;
 - Resposta da API;
 - Mensagem de credenciais inválidas;
 - Ausência de token.
@@ -433,34 +479,50 @@ Validações:
 
 ---
 
-## CT-10 - Atualização sem autenticação
-
-Tentativa de atualizar um booking sem token válido.
-
-Resultado esperado:
-
-```text
-403 Forbidden
-```
-
-Validações:
-
-- Acesso bloqueado;
-- Operação protegida contra requisição não autenticada.
-
-### Evidência
-
-![Unauthorized Update](prints/restful-booker-update-without-auth.png)
-
----
-
 ## CT-11 - Payload inválido
+
+```http
+POST /booking
+```
 
 É enviado um payload propositalmente inválido contendo campos ausentes e tipos incorretos.
 
-O objetivo é validar que a criação não seja concluída com sucesso.
+O objetivo do cenário é confirmar que a operação não seja concluída com sucesso.
 
-A API de laboratório utilizada pode responder com erro `400` ou `500` nesse cenário, portanto o teste valida a rejeição da operação.
+Na execução documentada, a API Restful Booker rejeitou a requisição retornando:
+
+```text
+500 Internal Server Error
+```
+
+As assertions validam que:
+
+- A resposta não pertença à faixa de sucesso `2xx`;
+- A API retorne um status de erro igual ou superior a `400`.
+
+O retorno `500` é documentado como comportamento observado da API pública de laboratório.
+
+Ele não é tratado como resposta ideal para um erro de validação do cliente.
+
+O script também registra um aviso quando ocorre resposta `5xx`, indicando que um erro `4xx` seria mais apropriado para esse tipo de entrada inválida.
+
+Exemplo da validação utilizada:
+
+```javascript
+pm.test("Booking inválido não deve ser criado com sucesso", function () {
+    pm.expect(pm.response.code).to.not.be.within(200, 299);
+});
+
+pm.test("API deve retornar uma resposta de erro", function () {
+    pm.expect(pm.response.code).to.be.at.least(400);
+});
+
+if (pm.response.code >= 500) {
+    console.warn(
+        "A API rejeitou o payload, porém retornou erro 5xx em vez de um erro de cliente 4xx."
+    );
+}
+```
 
 ### Evidência
 
@@ -490,13 +552,13 @@ Exemplo:
 
 Os valores de `token` e `bookingId` ficam inicialmente vazios e são preenchidos dinamicamente durante a execução.
 
-Isso permite que a suíte seja executada de forma independente, sem necessidade de inserir manualmente IDs ou tokens gerados anteriormente.
+Isso permite que a suíte seja executada sem necessidade de inserir manualmente IDs ou tokens gerados anteriormente.
 
 ---
 
 # Encadeamento de requisições
 
-A suíte avançada possui dependência controlada entre requisições.
+A suíte avançada possui dependência controlada entre requisições e utiliza valores gerados durante a própria execução.
 
 ```text
 Health Check
@@ -515,12 +577,20 @@ PUT
       ↓
 PATCH
       ↓
+Atualização sem autenticação → 403
+      ↓
 DELETE
       ↓
-Validar 404
+Validar exclusão → 404
+      ↓
+Autenticação inválida
+      ↓
+Payload inválido
 ```
 
-Dessa forma, valores retornados pela API são reutilizados automaticamente nos próximos cenários.
+O `bookingId` criado no início da execução é reutilizado pelos cenários seguintes.
+
+O CT-10 ocorre antes da exclusão para garantir que a resposta `403` esteja relacionada à ausência de autenticação e não à inexistência do recurso.
 
 ---
 
@@ -552,13 +622,35 @@ npm run api:advanced
 
 ---
 
-## Executar todo o projeto
+## Executar as duas suítes
 
 ```bash
 npm run api
 ```
 
-O comando completo executa primeiro a suíte JSONPlaceholder e, em seguida, a suíte Restful Booker.
+O comando executa primeiro a suíte JSONPlaceholder e, em seguida, a suíte Restful Booker.
+
+---
+
+# Geração de relatórios HTML
+
+Além da execução padrão pelo terminal, o projeto utiliza o **newman-reporter-htmlextra** para geração automática de relatórios HTML.
+
+Para executar as duas suítes e gerar os relatórios:
+
+```bash
+npm run api:report
+```
+
+São gerados:
+
+```text
+reports/
+├── jsonplaceholder.html
+└── index.html
+```
+
+O arquivo `index.html` corresponde ao relatório da suíte avançada Restful Booker e é utilizado como página principal na publicação via GitHub Pages.
 
 ---
 
@@ -570,7 +662,11 @@ Configuração disponível no `package.json`:
 "scripts": {
   "api": "npm run api:basic && npm run api:advanced",
   "api:basic": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\"",
-  "api:advanced": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\""
+  "api:advanced": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\"",
+  "reports:prepare": "node -e \"require('fs').mkdirSync('reports', { recursive: true })\"",
+  "api:basic:report": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\" -r cli,htmlextra --reporter-htmlextra-export reports/jsonplaceholder.html",
+  "api:advanced:report": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\" -r cli,htmlextra --reporter-htmlextra-export reports/index.html",
+  "api:report": "npm run reports:prepare && npm run api:basic:report && npm run api:advanced:report"
 }
 ```
 
@@ -578,7 +674,7 @@ Configuração disponível no `package.json`:
 
 # Resultado da suíte avançada
 
-Resultado obtido com Newman:
+Resultado da execução final documentada com Newman:
 
 ```text
 Iterations:     1
@@ -588,12 +684,14 @@ Assertions:    36
 Failures:       0
 ```
 
-Tempo registrado na execução:
+Na execução final registrada:
 
 ```text
-Total duration: 3.2s
-Average response time: ~195ms
+Total duration: 4.4s
+Average response time: 305ms
 ```
+
+Os tempos podem variar conforme rede e disponibilidade da API pública.
 
 ### Evidência
 
@@ -609,7 +707,17 @@ As duas collections também foram executadas em sequência utilizando:
 npm run api
 ```
 
-A execução concluiu sem falhas.
+Como os comandos são encadeados com `&&`, a suíte avançada somente é iniciada após a conclusão bem-sucedida da suíte básica.
+
+A execução completa foi concluída sem falhas.
+
+Resultados consolidados das duas suítes:
+
+```text
+Requests:   15
+Assertions: 47
+Failures:    0
+```
 
 ### Evidência
 
@@ -617,9 +725,9 @@ A execução concluiu sem falhas.
 
 ---
 
-# GitHub Actions - CI/CD
+# CI/CD com GitHub Actions
 
-O projeto possui pipeline configurado com **GitHub Actions**.
+O projeto possui pipeline de **CI/CD** configurado com GitHub Actions.
 
 Arquivo:
 
@@ -627,46 +735,95 @@ Arquivo:
 .github/workflows/api-tests.yml
 ```
 
-O workflow é acionado automaticamente em:
+O workflow é executado em:
 
 ```text
 push
 pull_request
+workflow_dispatch
 ```
 
-na branch:
+para a branch principal:
 
 ```text
 main
 ```
 
-Etapas do pipeline:
+---
+
+## Integração Contínua - CI
+
+Na etapa de CI, o pipeline:
 
 ```text
-Checkout repository
+Checkout do repositório
         ↓
-Setup Node.js
+Configuração do Node.js
         ↓
-npm ci
+Instalação das dependências
         ↓
-npm run api
+Execução das suítes de API
         ↓
-Newman
+Geração dos relatórios HTML
         ↓
-Resultado dos testes
+Validação dos resultados
 ```
 
-Como `npm run api` executa as duas collections, tanto a suíte básica quanto a suíte avançada fazem parte da validação automatizada do pipeline.
+O comando executado pelo workflow é:
+
+```bash
+npm run api:report
+```
+
+Dessa forma, as duas collections são executadas automaticamente durante o pipeline.
+
+Uma falha em uma das suítes interrompe a execução antes da etapa de publicação.
 
 ---
 
-## Resultado no GitHub Actions
+## Entrega Contínua - CD
 
-A execução automatizada foi concluída com sucesso após o envio da suíte avançada ao repositório.
+Nos eventos de `push` para a branch `main`, após a conclusão bem-sucedida dos testes, o pipeline prepara os relatórios HTML como artefato de publicação.
 
-### Evidência
+Fluxo:
 
-![GitHub Actions Success](prints/github-actions-api-tests-job-success.png)
+```text
+Testes aprovados
+        ↓
+Relatórios Newman
+        ↓
+Upload do artefato
+        ↓
+Deploy
+        ↓
+GitHub Pages
+```
+
+O relatório principal publicado corresponde à suíte avançada Restful Booker.
+
+A etapa de CD deste projeto é responsável pela **publicação automatizada dos relatórios de testes**, e não pelo deployment de uma aplicação.
+
+Isso permite demonstrar um fluxo completo no qual uma entrega somente ocorre após a aprovação automatizada dos testes.
+
+---
+
+# GitHub Pages
+
+Os relatórios gerados pelo Newman são preparados automaticamente para publicação no GitHub Pages.
+
+Relatório principal:
+
+```text
+reports/index.html
+```
+
+Relatório adicional:
+
+```text
+reports/jsonplaceholder.html
+```
+
+Após a execução do workflow na branch `main`, o conteúdo da pasta de relatórios é utilizado na etapa de deployment.
 
 ---
 
@@ -683,7 +840,7 @@ Requisições HTTP
    ↓
 API REST
    ↓
-Resposta JSON
+Resposta
    ↓
 Scripts JavaScript
    ↓
@@ -695,10 +852,47 @@ Newman
    ↓
 npm
    ↓
+Relatórios HTML
+   ↓
 GitHub Actions
    ↓
-CI/CD
+CI
+   ↓
+Testes aprovados
+   ↓
+CD
+   ↓
+GitHub Pages
 ```
+
+---
+
+# Estratégia de qualidade no pipeline
+
+O fluxo de CI/CD utiliza os testes automatizados como uma barreira de qualidade.
+
+A etapa de publicação depende da conclusão bem-sucedida da execução dos testes.
+
+```text
+Alteração no código
+        ↓
+Pipeline iniciado
+        ↓
+Testes de API
+        ↓
+Passou?
+   ↙           ↘
+Não            Sim
+ ↓              ↓
+Pipeline       Geração
+interrompido   de relatório
+                ↓
+              Deploy
+                ↓
+            GitHub Pages
+```
+
+Esse fluxo impede que o relatório de uma execução com testes falhando seja publicado pela etapa de deployment.
 
 ---
 
@@ -718,13 +912,18 @@ CI/CD
 - Testes positivos;
 - Testes negativos;
 - CRUD completo;
+- Isolamento do cenário de autorização antes da exclusão do recurso;
 - Scripts JavaScript;
 - Assertions automatizadas;
 - Execução via CLI;
 - Automação com Newman;
 - Scripts npm;
+- Geração de relatórios HTML;
 - Integração contínua;
+- Entrega contínua;
+- Quality Gate por execução automatizada de testes;
 - GitHub Actions;
+- GitHub Pages;
 - Registro de evidências;
 - Versionamento com Git e GitHub;
 - Documentação técnica.
@@ -767,7 +966,11 @@ Este projeto demonstra prática em:
 - Automação de testes de API;
 - npm;
 - GitHub Actions;
+- GitHub Pages;
 - CI/CD;
+- Integração Contínua;
+- Entrega Contínua;
+- Geração automatizada de relatórios;
 - Git;
 - GitHub;
 - Evidências;
@@ -777,9 +980,9 @@ Este projeto demonstra prática em:
 
 # Status do projeto
 
-**Concluído nesta etapa.**
+**Concluído para o escopo atual.**
 
-O projeto atualmente possui:
+O projeto possui:
 
 - 2 collections;
 - 2 APIs públicas utilizadas;
@@ -793,10 +996,14 @@ O projeto atualmente possui:
 - JSON Schema Validation;
 - Testes negativos;
 - Newman;
+- Newman HTML Extra Reporter;
 - Scripts npm;
+- Geração automática de relatórios;
 - Pipeline com GitHub Actions;
+- CI;
+- CD para publicação de relatórios;
+- GitHub Pages;
 - Execução local sem falhas;
-- Execução em CI/CD com sucesso;
 - Evidências documentadas.
 
 ---
@@ -805,7 +1012,17 @@ O projeto atualmente possui:
 
 O Restful Booker é uma API pública destinada a estudos e testes.
 
-Os dados podem ser reinicializados periodicamente pela própria aplicação. Por esse motivo, a suíte cria dinamicamente um novo booking e utiliza o ID retornado durante a própria execução, reduzindo dependência de dados previamente existentes.
+Os dados podem ser reinicializados periodicamente pela própria aplicação.
+
+Por esse motivo, a suíte cria dinamicamente um novo booking e utiliza o ID retornado durante a própria execução, reduzindo dependência de dados previamente existentes.
+
+Alguns comportamentos da API pública podem não representar a resposta ideal esperada em sistemas de produção.
+
+Quando isso ocorre, o projeto diferencia o comportamento observado da resposta tecnicamente mais apropriada, como no cenário de payload inválido que retornou:
+
+```text
+500 Internal Server Error
+```
 
 ---
 
@@ -816,12 +1033,13 @@ O projeto está concluído para o escopo atual.
 Possíveis evoluções futuras incluem:
 
 - Dados de teste externos;
-- Relatório HTML do Newman;
 - Mocks e stubs;
 - Testes de contrato;
 - Segurança de APIs;
 - OAuth 2.0 em uma API compatível;
-- Webhooks em uma API compatível.
+- Webhooks em uma API compatível;
+- Relatórios históricos;
+- Notificações automáticas do pipeline.
 
 ---
 

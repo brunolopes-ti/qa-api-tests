@@ -6,7 +6,11 @@
   "scripts": {
     "api": "npm run api:basic && npm run api:advanced",
     "api:basic": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\"",
-    "api:advanced": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\""
+    "api:advanced": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\"",
+    "reports:prepare": "node -e \"require('fs').mkdirSync('reports', { recursive: true })\"",
+    "api:basic:report": "newman run \"collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json\" -r cli,htmlextra --reporter-htmlextra-export reports/jsonplaceholder.html",
+    "api:advanced:report": "newman run \"collections/QA API Advanced - Restful Booker.postman_collection.json\" -e \"environments/Restful Booker - QA.postman_environment.json\" -r cli,htmlextra --reporter-htmlextra-export reports/index.html",
+    "api:report": "npm run reports:prepare && npm run api:basic:report && npm run api:advanced:report"
   },
   "repository": {
     "type": "git",
@@ -19,7 +23,9 @@
     "newman",
     "rest-api",
     "javascript",
-    "quality-assurance"
+    "quality-assurance",
+    "ci-cd",
+    "github-actions"
   ],
   "author": "Bruno Ramos Lopes",
   "license": "ISC",
@@ -29,6 +35,7 @@
   },
   "homepage": "https://github.com/brunolopes-ti/qa-api-tests#readme",
   "devDependencies": {
-    "newman": "^6.2.2"
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
   }
 }
