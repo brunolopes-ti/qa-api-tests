@@ -163,38 +163,87 @@ Arquivo:
 collections/QA Lab - API Tests (JSONPlaceholder).postman_collection.json
 ```
 
+A suíte contém operações `GET`, `POST`, `PATCH` e `DELETE`, com validações de status HTTP, payloads JSON, dados retornados e uso de variável de collection para encadeamento entre requisições.
+
 ## Cenários
 
-### CT-01 - GET - Consultar posts
+### CT-01 - GET - Buscar usuário por ID
+
+```http
+GET /users/1
+```
 
 Validações:
 
 - Status code `200`;
-- Retorno de dados;
-- Estrutura da resposta.
+- Presença do campo `name`;
+- ID retornado igual a `1`;
+- Armazenamento de `user_id`;
+- Correspondência entre o ID armazenado e o ID retornado pela API.
 
-### CT-02 - POST - Criar recurso
+---
+
+### CT-02 - POST - Criar usuário
+
+```http
+POST /users
+```
+
+Payload utilizado:
+
+```json
+{
+  "name": "Bruno Ramos",
+  "username": "brunolopes",
+  "email": "bruno@email.com"
+}
+```
 
 Validações:
 
 - Status code `201`;
 - Retorno de ID;
-- Dados enviados no payload;
-- Armazenamento de variável.
+- Nome retornado correspondente ao valor enviado;
+- Username retornado correspondente ao valor enviado;
+- E-mail retornado correspondente ao valor enviado;
+- Armazenamento de `user_id`;
+- Correspondência entre o ID armazenado e o ID retornado pela API.
 
-### CT-03 - PATCH - Atualizar recurso
+---
+
+### CT-03 - PATCH - Atualizar usuário
+
+```http
+PATCH /users/{{user_id}}
+```
+
+A requisição atualiza parcialmente o usuário identificado pela variável `user_id`.
+
+Payload utilizado:
+
+```json
+{
+  "name": "Bruno Ramos Atualizado"
+}
+```
 
 Validações:
 
 - Status code `200`;
-- Atualização parcial;
-- Conteúdo retornado.
+- Nome atualizado para `Bruno Ramos Atualizado`;
+- Preservação do ID do recurso.
 
-### CT-04 - DELETE - Remover recurso
+---
+
+### CT-04 - DELETE - Remover usuário
+
+```http
+DELETE /users/{{user_id}}
+```
 
 Validações:
 
-- Status esperado;
+- Status esperado `200` ou `204`;
 - Execução da operação de exclusão.
 
 ---
